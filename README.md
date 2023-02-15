@@ -10,4 +10,7 @@ $ npm install @types/node @types/express @types/morgan --save-dev
 $ npm install pg typeorm reflect-metadata --save
 
 $ npx typeorm init
+
+$ npm install bcryptjs class-validator class-transformer --save
+$ npm install @types/bcryptjs --save-dev
 ```
