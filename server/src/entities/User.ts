@@ -8,6 +8,7 @@ import {
 	BeforeInsert,
 } from 'typeorm';
 import bcrypt from 'bcryptjs';
+import { Exclude } from 'class-transformer';
 
 @Entity('users')
 export class User {
@@ -19,12 +20,19 @@ export class User {
 
 	@Index()
 	@Length(3, 32, { message: '사용자 이름은 3자 이상이어야 합니다.' })
-	@Column()
+	@Column({ unique: true })
 	username: string;
 
+	@Exclude()
 	@Column()
 	@Length(6, 255, { message: '비밀번호는 6자리 이상이어야 합니다.' })
 	password: string;
+
+	@OneToMany(() => Post, (post) => post.user)
+	posts: Post[];
+
+	@OneToMany(() => Vote, (vote) => vote.user)
+	votes: Vote[];
 
 	@BeforeInsert()
 	async hashPassword() {
