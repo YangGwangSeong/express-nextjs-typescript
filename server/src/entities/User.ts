@@ -1,3 +1,4 @@
+import BaseEntity from './Entity';
 import { IsEmail, Length } from 'class-validator';
 import {
 	Entity,
@@ -9,9 +10,10 @@ import {
 } from 'typeorm';
 import bcrypt from 'bcryptjs';
 import { Exclude } from 'class-transformer';
+import Post from './Post';
 
 @Entity('users')
-export class User {
+export default class User extends BaseEntity {
 	@Index()
 	@IsEmail(undefined, { message: '이메일 주소가 잘못되었습니다.' })
 	@Length(1, 255, { message: '이메일 주소를 비워둘 수 없습니다.' })

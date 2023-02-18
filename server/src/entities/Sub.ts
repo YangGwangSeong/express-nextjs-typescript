@@ -1,6 +1,6 @@
+import BaseEntity from './Entity';
 import { Expose } from 'class-transformer';
 import {
-	BaseEntity,
 	Column,
 	Entity,
 	Index,
