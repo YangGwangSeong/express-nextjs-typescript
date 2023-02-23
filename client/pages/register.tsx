@@ -24,7 +24,7 @@ const RegisterPage: NextPage = () => {
 				username: username,
 			});
 			console.log('res', res);
-			router.push('/login');
+			//router.push('/login');
 		} catch (error: any) {
 			console.log('error', error);
 			setErros(error.response.data || {});
