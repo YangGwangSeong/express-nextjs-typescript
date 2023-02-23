@@ -18,7 +18,7 @@ const RegisterPage: NextPage = () => {
 		e.preventDefault();
 
 		try {
-			const res = await axios.post('/auth/register', {
+			const res = await axios.post('/api/auth/register', {
 				email: email,
 				password: password,
 				username: username,
