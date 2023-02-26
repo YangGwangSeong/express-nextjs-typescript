@@ -6,13 +6,26 @@ import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 
 const LoginPage: NextPage = () => {
-	const [email, setEmail] = useState('');
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [errors, setErros] = useState<any>({});
 
 	const router = useRouter();
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+
+	const handleSubmit = async (e: FormEvent) => {
+		e.preventDefault();
+		try {
+			await axios.post(
+				'/api/auth/login',
+				{ password, username },
+				{ withCredentials: true },
+			);
+		} catch (error: any) {
+			console.log(error);
+			setErros(error.response.data || {});
+		}
+	};
 
 	return (
 		<div className="bg-white">
