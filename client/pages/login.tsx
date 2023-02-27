@@ -1,5 +1,6 @@
 import InputGroup from '@/components/ui/field/InputGroup';
 import axios from 'axios';
+import { useAuthDispatch } from 'context/auth';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -13,14 +14,19 @@ const LoginPage: NextPage = () => {
 	const router = useRouter();
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 
+	const dispatch = useAuthDispatch();
+
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		try {
-			await axios.post(
+			const res = await axios.post(
 				'/api/auth/login',
 				{ password, username },
 				{ withCredentials: true },
 			);
+
+			dispatch('LOGIN', res.data?.user);
+			router.push('/');
 		} catch (error: any) {
 			console.log(error);
 			setErros(error.response.data || {});
