@@ -5,6 +5,8 @@ import {
 	PropsWithChildren,
 	useContext,
 	useReducer,
+	Dispatch,
+	ReactNode,
 } from 'react';
 
 interface AuthState {
@@ -13,32 +15,39 @@ interface AuthState {
 	loading: boolean;
 }
 
-const StateContext = createContext<AuthState>({
+export type AuthAction =
+	| { type: 'LOGIN'; payload: User }
+	| { type: 'LOGOUT' }
+	| { type: 'STOP_LOADING' }
+	| { type: undefined };
+
+const initialState: AuthState = {
 	authenticated: false,
 	user: undefined,
 	loading: true,
+};
+
+const AuthContext = createContext<{
+	state: AuthState;
+	dispatch: Dispatch<AuthAction>;
+}>({
+	state: initialState,
+	dispatch: () => null,
 });
 
-const DispatchContext = createContext<any>(null);
-
-interface Action {
-	type: string;
-	payload: any;
-}
-
-const reducer = (state: AuthState, { type, payload }: Action) => {
-	switch (type) {
+const authReducer = (state: AuthState, action: AuthAction): AuthState => {
+	switch (action.type) {
 		case 'LOGIN':
 			return {
 				...state,
 				authenticated: true,
-				user: payload,
+				user: action.payload,
 			};
 		case 'LOGOUT':
 			return {
 				...state,
 				authenticated: false,
-				user: null,
+				user: undefined,
 			};
 		case 'STOP_LOADING':
 			return {
@@ -46,31 +55,21 @@ const reducer = (state: AuthState, { type, payload }: Action) => {
 				loading: false,
 			};
 		default:
-			throw new Error(`Unknown action type: ${type}`);
+			throw new Error(`Unknown action type: ${action.type}`);
 	}
 };
 
-const AuthProvider: FC<PropsWithChildren<unknown>> = ({ children }) => {
-	const [state, defaultDispatch] = useReducer(reducer, {
-		user: undefined,
-		authenticated: false,
-		loading: true,
-	});
-
-	console.log('state', state);
-
-	const dispatch = (type: string, payload?: any) => {
-		defaultDispatch({ type, payload });
-	};
+const AuthProvider: FC<PropsWithChildren<{ children?: ReactNode }>> = ({
+	children,
+}) => {
+	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	return (
-		<DispatchContext.Provider value={dispatch}>
-			<StateContext.Provider value={state}>{children}</StateContext.Provider>
-		</DispatchContext.Provider>
+		<AuthContext.Provider value={{ state, dispatch }}>
+			{children}
+		</AuthContext.Provider>
 	);
 };
+const useAuthStateDispatch = () => useContext(AuthContext);
 
-export default AuthProvider;
-
-export const useAuthState = () => useContext(StateContext);
-export const useAuthDispatch = () => useContext(DispatchContext);
+export { AuthProvider, useAuthStateDispatch };
