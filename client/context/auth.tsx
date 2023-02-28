@@ -7,6 +7,7 @@ import {
 	useReducer,
 	Dispatch,
 	ReactNode,
+	useMemo,
 } from 'react';
 
 interface AuthState {
@@ -64,10 +65,10 @@ const AuthProvider: FC<PropsWithChildren<{ children?: ReactNode }>> = ({
 }) => {
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
+	const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
 	return (
-		<AuthContext.Provider value={{ state, dispatch }}>
-			{children}
-		</AuthContext.Provider>
+		<AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 	);
 };
 const useAuthStateDispatch = () => useContext(AuthContext);
