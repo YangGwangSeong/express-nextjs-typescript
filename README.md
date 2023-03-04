@@ -21,4 +21,6 @@ $ npm i --save-dev @types/jsonwebtoken
 $ npm install dotenv                                                            // 환경변수
 $ npm install cookie                                                            // cookie
 $ npm i --save-dev @types/cookie
+$ npm install cookie-parser                                                     // cookie-parser
+$ npm i --save-dev @types/cookie-parser
 ```
