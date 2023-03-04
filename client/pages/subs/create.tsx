@@ -11,10 +11,13 @@ const SubCreatePage: NextPage = () => {
 	const [errors, setErrors] = useState<any>({});
 	const router = useRouter();
 
+	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+	axios.defaults.withCredentials = true;
+
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();
 		try {
-			const res = await axios.post('/subs', { name, title, description });
+			const res = await axios.post('/api/subs', { name, title, description });
 
 			router.push(`/r/${res.data.name}`);
 		} catch (error: any) {
