@@ -14,7 +14,9 @@ const LoginPage: NextPage = () => {
 	const router = useRouter();
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 
-	const { dispatch } = useAuthStateDispatch();
+	const { dispatch, state } = useAuthStateDispatch();
+
+	if (state.authenticated) router.push('/');
 
 	const handleSubmit = async (e: FormEvent) => {
 		e.preventDefault();

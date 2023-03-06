@@ -1,4 +1,5 @@
 import { User } from '@/shared/interfaces/user.interface';
+import axios from 'axios';
 import {
 	createContext,
 	FC,
@@ -8,6 +9,7 @@ import {
 	Dispatch,
 	ReactNode,
 	useMemo,
+	useEffect,
 } from 'react';
 
 interface AuthState {
@@ -66,6 +68,22 @@ const AuthProvider: FC<PropsWithChildren<{ children?: ReactNode }>> = ({
 	const [state, dispatch] = useReducer(authReducer, initialState);
 
 	const contextValue = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
+	useEffect(() => {
+		async function loadUser() {
+			try {
+				axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+				axios.defaults.withCredentials = true;
+				const res = await axios.get('/auth/me');
+				dispatch({ type: 'LOGIN', payload: res.data });
+			} catch (error) {
+				console.log(error);
+			} finally {
+				dispatch({ type: 'STOP_LOADING' });
+			}
+		}
+		loadUser();
+	}, []);
 
 	return (
 		<AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
