@@ -74,7 +74,7 @@ const AuthProvider: FC<PropsWithChildren<{ children?: ReactNode }>> = ({
 			try {
 				axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 				axios.defaults.withCredentials = true;
-				const res = await axios.get('/auth/me');
+				const res = await axios.get('/api/auth/me');
 				dispatch({ type: 'LOGIN', payload: res.data });
 			} catch (error) {
 				console.log(error);
