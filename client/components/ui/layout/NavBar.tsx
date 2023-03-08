@@ -1,10 +1,23 @@
+import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
 import Link from 'next/link';
 import React, { FC } from 'react';
 
 const NavBar: FC = () => {
-	const { state } = useAuthStateDispatch();
+	const { state, dispatch } = useAuthStateDispatch();
 	const { loading, authenticated } = state;
+
+	const handleLogout = async () => {
+		axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
+		axios.defaults.withCredentials = true;
+		try {
+			const res = await axios.post('/api/auth/logout');
+			dispatch({ type: 'LOGOUT' });
+			window.location.reload();
+		} catch (error) {
+			console.log(error);
+		}
+	};
 	return (
 		<div className="fixed inset-x-0 top-0 z-10 flex items-center justify-between h-16 px-5 bg-white">
 			<span className="text-2xl font-semibold text-gray-400">
@@ -23,7 +36,10 @@ const NavBar: FC = () => {
 			<div className="flex">
 				{!loading &&
 					(authenticated ? (
-						<button className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded">
+						<button
+							className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded"
+							onClick={handleLogout}
+						>
 							로그아웃
 						</button>
 					) : (
