@@ -12,7 +12,7 @@ export default function App({ Component, pageProps }: AppProps) {
 	return (
 		<AuthProvider>
 			{!authRoute && <NavBar></NavBar>}
-			<div className={authRoutes ? '' : 'pt-12'}>
+			<div className={authRoute ? '' : 'pt-12'}>
 				<Component {...pageProps} />
 			</div>
 		</AuthProvider>
