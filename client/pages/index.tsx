@@ -9,7 +9,7 @@ import useSWR from 'swr';
 const HomePage: NextPage = () => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated } = state;
-	console.log(authenticated);
+
 	const fetcher = async (url: string) => {
 		return await axios.get(url).then(res => res.data);
 	};

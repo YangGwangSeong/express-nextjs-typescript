@@ -1,10 +1,16 @@
 import axios from 'axios';
+import { useAuthStateDispatch } from 'context/auth';
 import { NextPage } from 'next';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { ChangeEvent, useEffect, useRef, useState } from 'react';
 import useSWR from 'swr';
+
 const SubPage: NextPage = () => {
+	const [ownSub, setOwnSub] = useState(false);
+	const { state } = useAuthStateDispatch();
+	const { authenticated, user } = state;
+
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 	axios.defaults.withCredentials = true;
 
@@ -17,6 +23,7 @@ const SubPage: NextPage = () => {
 		}
 	};
 
+	const fileInputRef = useRef<HTMLInputElement>(null);
 	const router = useRouter();
 	const subName = router.query.sub;
 	const { data: sub, error } = useSWR(
@@ -24,11 +31,48 @@ const SubPage: NextPage = () => {
 		fetcher,
 	);
 	console.log(sub);
+	const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+		if (e.target.files === null) return;
+
+		const file = e.target.files[0];
+
+		const formData = new FormData();
+		formData.append('file', file);
+		formData.append('type', fileInputRef.current!.name);
+
+		try {
+			await axios.post(`/api/subs/${sub.name}/upload`, formData, {
+				headers: { 'Content-Type': 'multipart/form-data' },
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
+	const openFileInput = (type: string) => {
+		const fileInput = fileInputRef.current;
+		if (fileInput) {
+			fileInput.name = type;
+			fileInput.click();
+		}
+	};
+
+	useEffect(() => {
+		if (!sub) return;
+		setOwnSub(authenticated && user?.username === sub.username);
+	}, [sub]);
+
 	return (
 		<>
 			{sub && (
 				<>
 					<div>
+						<input
+							type="file"
+							hidden={true}
+							ref={fileInputRef}
+							onChange={uploadImage}
+						/>
 						<div className="bg-gray-400">
 							{sub.bannerUrl ? (
 								<div
@@ -39,9 +83,13 @@ const SubPage: NextPage = () => {
 										backgroundSize: 'cover',
 										backgroundPosition: 'center',
 									}}
+									onClick={() => openFileInput('banner')}
 								></div>
 							) : (
-								<div className="h-20 bg-gray-400"></div>
+								<div
+									className="h-20 bg-gray-400"
+									onClick={() => openFileInput('banner')}
+								></div>
 							)}
 						</div>
 						<div className="h-20 bg-white">
@@ -54,6 +102,7 @@ const SubPage: NextPage = () => {
 											width={70}
 											height={70}
 											className="rounded-full"
+											onClick={() => openFileInput('image')}
 										></Image>
 									)}
 								</div>
