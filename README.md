@@ -23,4 +23,6 @@ $ npm install cookie                                                            
 $ npm i --save-dev @types/cookie
 $ npm install cookie-parser                                                     // cookie-parser
 $ npm i --save-dev @types/cookie-parser
+$ npm install multer                                                            // 이미지 업로드
+$ npm i --save-dev @types/multer
 ```

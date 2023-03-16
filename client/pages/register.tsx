@@ -1,5 +1,6 @@
 import InputGroup from '@/components/ui/field/InputGroup';
 import axios from 'axios';
+import { useAuthStateDispatch } from 'context/auth';
 import { NextPage } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -10,8 +11,11 @@ const RegisterPage: NextPage = () => {
 	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [errors, setErros] = useState<any>({});
+	const { state } = useAuthStateDispatch();
 
 	const router = useRouter();
+	if (state.authenticated) router.push('/');
+
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 
 	const handleSubmit = async (e: FormEvent) => {

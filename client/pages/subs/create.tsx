@@ -1,6 +1,6 @@
 import InputGroup from '@/components/ui/field/InputGroup';
 import axios from 'axios';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 
@@ -80,3 +80,15 @@ const SubCreatePage: NextPage = () => {
 };
 
 export default SubCreatePage;
+
+export const getServerSideProps: GetServerSideProps = async ({ req, res }) => {
+	try {
+		const cookie = req.headers.cookie;
+		if (!cookie) throw new Error('Missing auth token cookie');
+		await axios.get('/api/auth/me', { headers: { cookie } });
+	} catch (error) {
+		res.writeHead(307, { Location: '/login' }).end();
+	}
+
+	return { props: {} };
+};
