@@ -37,6 +37,7 @@ const HomePage: NextPage = () => {
 										alt={'Sub'}
 										width={24}
 										height={24}
+										style={{ width: 24, height: 24 }}
 									></Image>
 								</Link>
 								<Link
