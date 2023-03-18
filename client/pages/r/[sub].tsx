@@ -1,3 +1,5 @@
+import Sidebar from '@/components/ui/layout/Sidebar';
+import { Sub } from '@/shared/interfaces/sub.interfeace';
 import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
 import { NextPage } from 'next';
@@ -16,7 +18,7 @@ const SubPage: NextPage = () => {
 
 	const fetcher = async (url: string) => {
 		try {
-			const res = await axios.get(url);
+			const res = await axios.get<Sub>(url);
 			return res.data;
 		} catch (error: any) {
 			throw error.response.data;
@@ -41,7 +43,7 @@ const SubPage: NextPage = () => {
 		formData.append('type', fileInputRef.current!.name);
 
 		try {
-			await axios.post(`/api/subs/${sub.name}/upload`, formData, {
+			await axios.post(`/api/subs/${sub?.name}/upload`, formData, {
 				headers: { 'Content-Type': 'multipart/form-data' },
 			});
 		} catch (error) {
@@ -117,7 +119,10 @@ const SubPage: NextPage = () => {
 							</div>
 						</div>
 					</div>
-					<div className="flex mx-w-5xl px-4 pt-5 mx-auto"></div>
+					<div className="flex mx-w-5xl px-4 pt-5 mx-auto">
+						<div className="w-full md:mr-3 md:w-8/12 "></div>
+						<Sidebar sub={sub}></Sidebar>
+					</div>
 				</>
 			)}
 		</>
