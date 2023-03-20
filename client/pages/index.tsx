@@ -10,11 +10,8 @@ const HomePage: NextPage = () => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated } = state;
 
-	const fetcher = async (url: string) => {
-		return await axios.get(url).then(res => res.data);
-	};
 	const address = 'http://localhost:4000/api/subs/sub/topSubs';
-	const { data: topSubs } = useSWR<Sub[]>(address, fetcher);
+	const { data: topSubs } = useSWR<Sub[]>(address);
 
 	return (
 		<div className="flex max-w-5xl px-4 pt-5 mx-auto">

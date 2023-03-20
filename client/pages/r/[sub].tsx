@@ -16,22 +16,10 @@ const SubPage: NextPage = () => {
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 	axios.defaults.withCredentials = true;
 
-	const fetcher = async (url: string) => {
-		try {
-			const res = await axios.get<Sub>(url);
-			return res.data;
-		} catch (error: any) {
-			throw error.response.data;
-		}
-	};
-
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const router = useRouter();
 	const subName = router.query.sub;
-	const { data: sub, error } = useSWR(
-		subName ? `/api/subs/${subName}` : null,
-		fetcher,
-	);
+	const { data: sub, error } = useSWR(subName ? `/api/subs/${subName}` : null);
 	console.log(sub);
 	const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files === null) return;
