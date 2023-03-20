@@ -17,11 +17,26 @@ const getSub = async (req: Request, res: Response) => {
 	try {
 		const sub = await Sub.findOneByOrFail({ name });
 
+		const posts = await Post.find({
+			where: { subName: sub.name },
+			order: { createdAt: 'DESC' },
+			relations: ['comments', 'votes'],
+		});
+
+		sub.posts = posts;
+
+		if (res.locals.user) {
+			sub.posts.forEach((p) => p.setUserVote(res.locals.user));
+		}
+
+		console.log('sub', sub);
+
 		return res.json(sub);
 	} catch (error) {
 		return res.status(404).json({ error: '커뮤니티를 찾을 수 없습니다.' });
 	}
 };
+
 const createSub = async (req: Request, res: Response, next: NextFunction) => {
 	const { name, title, description } = req.body;
 
