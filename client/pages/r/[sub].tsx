@@ -1,3 +1,5 @@
+import Sidebar from '@/components/ui/layout/Sidebar';
+import { Sub } from '@/shared/interfaces/sub.interfeace';
 import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
 import { NextPage } from 'next';
@@ -14,22 +16,10 @@ const SubPage: NextPage = () => {
 	axios.defaults.baseURL = process.env.NEXT_PUBLIC_SERVER_BASE_URL;
 	axios.defaults.withCredentials = true;
 
-	const fetcher = async (url: string) => {
-		try {
-			const res = await axios.get(url);
-			return res.data;
-		} catch (error: any) {
-			throw error.response.data;
-		}
-	};
-
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const router = useRouter();
 	const subName = router.query.sub;
-	const { data: sub, error } = useSWR(
-		subName ? `/api/subs/${subName}` : null,
-		fetcher,
-	);
+	const { data: sub, error } = useSWR(subName ? `/api/subs/${subName}` : null);
 	console.log(sub);
 	const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files === null) return;
@@ -41,7 +31,7 @@ const SubPage: NextPage = () => {
 		formData.append('type', fileInputRef.current!.name);
 
 		try {
-			await axios.post(`/api/subs/${sub.name}/upload`, formData, {
+			await axios.post(`/api/subs/${sub?.name}/upload`, formData, {
 				headers: { 'Content-Type': 'multipart/form-data' },
 			});
 		} catch (error) {
@@ -117,7 +107,10 @@ const SubPage: NextPage = () => {
 							</div>
 						</div>
 					</div>
-					<div className="flex mx-w-5xl px-4 pt-5 mx-auto"></div>
+					<div className="flex mx-w-5xl px-4 pt-5 mx-auto">
+						<div className="w-full md:mr-3 md:w-8/12 "></div>
+						<Sidebar sub={sub}></Sidebar>
+					</div>
 				</>
 			)}
 		</>

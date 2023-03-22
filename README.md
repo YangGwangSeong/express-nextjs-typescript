@@ -25,4 +25,5 @@ $ npm install cookie-parser                                                     
 $ npm i --save-dev @types/cookie-parser
 $ npm install multer                                                            // 이미지 업로드
 $ npm i --save-dev @types/multer
+$ npm install transliteration --save                                            //url 슬러그 사용
 ```
