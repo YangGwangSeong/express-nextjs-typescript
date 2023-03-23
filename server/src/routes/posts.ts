@@ -3,6 +3,7 @@ import userMiddleware from '../middlewares/user';
 import authMiddleware from '../middlewares/auth';
 import Sub from '../entities/Sub';
 import Post from '../entities/Post';
+import Comment from '../entities/Comment';
 
 const getPost = async (req: Request, res: Response, next: NextFunction) => {
 	const { identifier, slug } = req.params;
@@ -48,8 +49,42 @@ const createPost = async (req: Request, res: Response, next: NextFunction) => {
 	}
 };
 
-const router = Router();
-router.get('/:identifier/:slug', userMiddleware, getPost);
-router.post('/', userMiddleware, authMiddleware, createPost);
+const createPostComment = async (
+	req: Request,
+	res: Response,
+	next: NextFunction,
+) => {
+	const { identifier, slug } = req.params;
+	const body = req.body.comment;
+	try {
+		const post = await Post.findOneByOrFail({
+			identifier: identifier,
+			slug: slug,
+		});
+		const comment = new Comment();
+		comment.body = body;
+		comment.user = res.locals.user;
+		comment.post = post;
 
+		if (res.locals.user) {
+			post.setUserVote(res.locals.user);
+		}
+
+		await comment.save();
+		return res.json(comment);
+	} catch (error) {
+		console.log(error);
+		return res.status(404).json({ error: '게시물을 찾을 수 없습니다.' });
+	}
+};
+
+const router = Router();
+router.post('/', userMiddleware, authMiddleware, createPost);
+router.get('/:identifier/:slug', userMiddleware, getPost);
+router.post(
+	'/:identifier/:slug/comments',
+	userMiddleware,
+	authMiddleware,
+	createPostComment,
+);
 export default router;
