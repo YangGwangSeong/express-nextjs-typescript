@@ -1,3 +1,4 @@
+import { Comment } from '@/shared/interfaces/comment.interface';
 import { Post } from '@/shared/interfaces/post.interface';
 import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
@@ -16,6 +17,9 @@ const PostPage: NextPage = () => {
 	const [newComment, setNewComment] = useState('');
 	const { data: post, error } = useSWR<Post>(
 		identifier && slug ? `/api/posts/${identifier}/${slug}` : null,
+	);
+	const { data: comments } = useSWR<Comment[]>(
+		identifier && slug ? `/api/posts/${identifier}/${slug}/comments` : null,
 	);
 
 	const handleSubmit = async (e: FormEvent) => {
@@ -115,6 +119,28 @@ const PostPage: NextPage = () => {
 									</div>
 								)}
 							</div>
+							{comments?.map(comment => (
+								<div className="flex" key={comment.identifier}>
+									<div className="py-2 pr-2">
+										<p className="mb-1 text-xs leading-none">
+											<Link
+												href={`/u/${comment.username}`}
+												className="mr-1 font-bold hover:underline"
+											>
+												{comment.username}
+											</Link>
+											<span className="text-gray-600">
+												{`
+													${comment.voteScore}
+													posts
+													${dayjs(comment.createdAt).format('YYYY-MM-DD HH:mm')}
+													`}
+											</span>
+										</p>
+										<p>{comment.body}</p>
+									</div>
+								</div>
+							))}
 						</>
 					)}
 				</div>
