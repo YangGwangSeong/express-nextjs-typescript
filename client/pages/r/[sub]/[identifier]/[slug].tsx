@@ -16,10 +16,14 @@ const PostPage: NextPage = () => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated, user } = state;
 	const [newComment, setNewComment] = useState('');
-	const { data: post, error } = useSWR<Post>(
+	const {
+		data: post,
+		mutate: postMutate,
+		error,
+	} = useSWR<Post>(
 		identifier && slug ? `/api/posts/${identifier}/${slug}` : null,
 	);
-	const { data: comments, mutate } = useSWR<Comment[]>(
+	const { data: comments, mutate: commentMutate } = useSWR<Comment[]>(
 		identifier && slug ? `/api/posts/${identifier}/${slug}/comments` : null,
 	);
 
@@ -36,7 +40,7 @@ const PostPage: NextPage = () => {
 					comment: newComment,
 				},
 			);
-			mutate();
+			commentMutate();
 			setNewComment('');
 		} catch (error) {
 			console.log(error);
@@ -60,6 +64,8 @@ const PostPage: NextPage = () => {
 				commentIdentifier: comment?.identifier,
 				value,
 			});
+			postMutate();
+			commentMutate();
 		} catch (error) {
 			console.log(error);
 		}
@@ -180,7 +186,7 @@ const PostPage: NextPage = () => {
 												})}
 											></i>
 										</div>
-										<p className="text-xs font-bold">{post.voteScore}</p>
+										<p className="text-xs font-bold">{comment.voteScore}</p>
 										<div
 											className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
 											onClick={() => vote(-1, comment)}
