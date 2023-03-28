@@ -9,6 +9,7 @@ import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 import useSWR from 'swr';
 import classNames from 'classnames';
+import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
 
 const PostPage: NextPage = () => {
 	const router = useRouter();
@@ -80,25 +81,25 @@ const PostPage: NextPage = () => {
 							<div className="flex">
 								<div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
 									<div
-										className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+										className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
 										onClick={() => vote(1)}
 									>
-										<i
-											className={classNames('fas fa-arrow-up', {
-												'text-red-500': post.userVote === 1,
-											})}
-										></i>
+										{post.userVote === 1 ? (
+											<FaArrowUp className="mx-auto text-red-500" />
+										) : (
+											<FaArrowUp />
+										)}
 									</div>
 									<p className="text-xs font-bold">{post.voteScore}</p>
 									<div
-										className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
+										className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
 										onClick={() => vote(-1)}
 									>
-										<i
-											className={classNames('fas fa-arrow-down', {
-												'text-blue-500': post.userVote === -1,
-											})}
-										></i>
+										{post.userVote === -1 ? (
+											<FaArrowDown className="mx-auto text-blue-500" />
+										) : (
+											<FaArrowDown />
+										)}
 									</div>
 								</div>
 
@@ -177,25 +178,25 @@ const PostPage: NextPage = () => {
 								<div className="flex" key={comment.identifier}>
 									<div className="flex-shrink-0 w-10 py-2 text-center rounded-l">
 										<div
-											className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
+											className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-red-500"
 											onClick={() => vote(1, comment)}
 										>
-											<i
-												className={classNames('fas fa-arrow-up', {
-													'text-red-500': comment.userVote === 1,
-												})}
-											></i>
+											{comment.userVote === 1 ? (
+												<FaArrowUp className="mx-auto text-red-500" />
+											) : (
+												<FaArrowUp />
+											)}
 										</div>
 										<p className="text-xs font-bold">{comment.voteScore}</p>
 										<div
-											className="w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
+											className="flex justify-center w-6 mx-auto text-gray-400 rounded cursor-pointer hover:bg-gray-300 hover:text-blue-500"
 											onClick={() => vote(-1, comment)}
 										>
-											<i
-												className={classNames('fas fa-arrow-down', {
-													'text-blue-500': comment.userVote === -1,
-												})}
-											></i>
+											{comment.userVote === -1 ? (
+												<FaArrowDown className="mx-auto text-blue-500" />
+											) : (
+												<FaArrowDown />
+											)}
 										</div>
 									</div>
 
