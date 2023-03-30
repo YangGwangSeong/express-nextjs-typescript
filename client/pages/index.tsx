@@ -1,3 +1,4 @@
+import { Post } from '@/shared/interfaces/post.interface';
 import { Sub } from '@/shared/interfaces/sub.interfeace';
 import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
@@ -5,12 +6,27 @@ import { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 const HomePage: NextPage = () => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated } = state;
 
 	const address = 'http://localhost:4000/api/subs/sub/topSubs';
+
+	const getKey = (pageIndex: number, previousPageData: Post[]) => {
+		if (previousPageData && !previousPageData.length) return null;
+		return `/posts?page=${pageIndex}`;
+	};
+
+	const {
+		data,
+		error,
+		size: page,
+		setSize: setPage,
+		isValidating,
+		mutate,
+	} = useSWRInfinite<Post[]>(getKey);
 	const { data: topSubs } = useSWR<Sub[]>(address);
 
 	return (
