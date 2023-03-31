@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { FaArrowDown, FaArrowUp, FaCommentAlt } from 'react-icons/fa';
 
-const PostCard: FC<{ post: Post; subMutate: () => void }> = ({
+const PostCard: FC<{ post: Post; subMutate?: () => void }> = ({
 	post,
 	subMutate,
 }) => {
@@ -28,7 +28,7 @@ const PostCard: FC<{ post: Post; subMutate: () => void }> = ({
 				slug: post.slug,
 				value: value,
 			});
-			subMutate();
+			if (subMutate) subMutate();
 		} catch (error) {
 			console.log(error);
 		}

@@ -1,3 +1,4 @@
+import PostCard from '@/components/ui/post-card/PostCard';
 import { Post } from '@/shared/interfaces/post.interface';
 import { Sub } from '@/shared/interfaces/sub.interfeace';
 import axios from 'axios';
@@ -16,7 +17,7 @@ const HomePage: NextPage = () => {
 
 	const getKey = (pageIndex: number, previousPageData: Post[]) => {
 		if (previousPageData && !previousPageData.length) return null;
-		return `/posts?page=${pageIndex}`;
+		return `/api/posts?page=${pageIndex}`;
 	};
 
 	const {
@@ -27,11 +28,22 @@ const HomePage: NextPage = () => {
 		isValidating,
 		mutate,
 	} = useSWRInfinite<Post[]>(getKey);
+	const isInitialLoading = !data && !error;
+	const posts: Post[] = data ? ([] as Post[]).concat(...data) : [];
+
 	const { data: topSubs } = useSWR<Sub[]>(address);
 
 	return (
 		<div className="flex max-w-5xl px-4 pt-5 mx-auto">
-			<div className="w-full md:mr-3 md:w-8/12"></div>
+			{/* 포스트 리스트 */}
+			<div className="w-full md:mr-3 md:w-8/12">
+				{isInitialLoading && (
+					<p className="text-lg text-center">로딩중입니다...</p>
+				)}
+				{posts?.map(post => (
+					<PostCard key={post.identifier} post={post}></PostCard>
+				))}
+			</div>
 			<div className="hidden w-4/12 ml-3 md:block">
 				<div className="bg-white border rounded">
 					<div className="p-4 border-b">
