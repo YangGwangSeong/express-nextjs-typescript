@@ -43,6 +43,9 @@ const HomePage: NextPage = () => {
 				{posts?.map(post => (
 					<PostCard key={post.identifier} post={post}></PostCard>
 				))}
+				{isValidating && posts.length > 0 && (
+					<p className="text-lg text-center">Loading More...</p>
+				)}
 			</div>
 			<div className="hidden w-4/12 ml-3 md:block">
 				<div className="bg-white border rounded">
