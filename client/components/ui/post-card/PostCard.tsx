@@ -8,10 +8,11 @@ import { useRouter } from 'next/router';
 import React, { FC } from 'react';
 import { FaArrowDown, FaArrowUp, FaCommentAlt } from 'react-icons/fa';
 
-const PostCard: FC<{ post: Post; subMutate?: () => void }> = ({
-	post,
-	subMutate,
-}) => {
+const PostCard: FC<{
+	post: Post;
+	subMutate?: () => void;
+	mutate?: () => void;
+}> = ({ post, subMutate, mutate }) => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated, user } = state;
 	const router = useRouter();
@@ -28,6 +29,7 @@ const PostCard: FC<{ post: Post; subMutate?: () => void }> = ({
 				slug: post.slug,
 				value: value,
 			});
+			if (mutate) mutate();
 			if (subMutate) subMutate();
 		} catch (error) {
 			console.log(error);
