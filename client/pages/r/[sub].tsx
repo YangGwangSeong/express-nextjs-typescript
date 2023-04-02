@@ -1,4 +1,6 @@
 import Sidebar from '@/components/ui/layout/Sidebar';
+import PostCard from '@/components/ui/post-card/PostCard';
+import { Post } from '@/shared/interfaces/post.interface';
 import { Sub } from '@/shared/interfaces/sub.interfeace';
 import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
@@ -19,7 +21,11 @@ const SubPage: NextPage = () => {
 	const fileInputRef = useRef<HTMLInputElement>(null);
 	const router = useRouter();
 	const subName = router.query.sub;
-	const { data: sub, error } = useSWR(subName ? `/api/subs/${subName}` : null);
+	const {
+		data: sub,
+		mutate: subMutate,
+		error,
+	} = useSWR(subName ? `/api/subs/${subName}` : null);
 	console.log(sub);
 	const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files === null) return;
@@ -52,6 +58,18 @@ const SubPage: NextPage = () => {
 		setOwnSub(authenticated && user?.username === sub.username);
 	}, [sub]);
 
+	let renderPosts;
+	if (!sub) {
+		renderPosts = <p className="text-lg text-center">로딩중...</p>;
+	} else if (sub.posts.length === 0) {
+		renderPosts = (
+			<p className="text-lg text-center">아직 작성된 포스트가 없습니다.</p>
+		);
+	} else {
+		renderPosts = sub.posts.map((post: Post) => (
+			<PostCard key={post.identifier} post={post} subMutate={subMutate} />
+		));
+	}
 	return (
 		<>
 			{sub && (
@@ -107,8 +125,9 @@ const SubPage: NextPage = () => {
 							</div>
 						</div>
 					</div>
+					{/* 포스트 & 사이드바 */}
 					<div className="flex mx-w-5xl px-4 pt-5 mx-auto">
-						<div className="w-full md:mr-3 md:w-8/12 "></div>
+						<div className="w-full md:mr-3 md:w-8/12 ">{renderPosts}</div>
 						<Sidebar sub={sub}></Sidebar>
 					</div>
 				</>
