@@ -62,39 +62,41 @@ const PostCard: FC<{
 			</div>
 			{/* 포스트 데이터부분 */}
 			<div className="w-full p-2">
-				{!isInSubPage && (
-					<div className="flex items-center">
-						<Link href={`/r/${post.subName}`}>
-							{post.sub && (
-								<Image
-									className="rounded-full cursor-pointer"
-									src={post.sub?.imageUrl}
-									alt={'sub'}
-									width={12}
-									height={12}
-								></Image>
-							)}
-						</Link>
-						<Link
-							className="ml-2 text-xs font-bold cursor-pointer hover:underline"
-							href={`/r/${post.subName}`}
-						>
-							/r/{post.subName}
-						</Link>
-						<span className="mx-1 text-xs text-gray-400">•</span>
-					</div>
-				)}
+				<div className="flex items-center">
+					{!isInSubPage && (
+						<div className="flex items-center">
+							<Link href={`/r/${post.subName}`}>
+								{post.sub && (
+									<Image
+										className="rounded-full cursor-pointer"
+										src={post.sub?.imageUrl}
+										alt={'sub'}
+										width={12}
+										height={12}
+									></Image>
+								)}
+							</Link>
+							<Link
+								className="ml-2 text-xs font-bold cursor-pointer hover:underline"
+								href={`/r/${post.subName}`}
+							>
+								/r/{post.subName}
+							</Link>
+							<span className="mx-1 text-xs text-gray-400">•</span>
+						</div>
+					)}
 
-				<p className="text-xs text-gray-400">
-					Posted by
-					<Link className="mx-1 hover:underline" href={`/u/${post.username}`}>
-						/u/{post.username}
-					</Link>
-					<Link className="mx-1 hover:underline" href={post.url}>
-						{dayjs(post.createdAt).format('YYYY-MM-DD HH:mm')}
-					</Link>
-				</p>
-				{/* </div> */}
+					<p className="text-xs text-gray-400">
+						Posted by
+						<Link className="mx-1 hover:underline" href={`/u/${post.username}`}>
+							/u/{post.username}
+						</Link>
+						<Link className="mx-1 hover:underline" href={post.url}>
+							{dayjs(post.createdAt).format('YYYY-MM-DD HH:mm')}
+						</Link>
+					</p>
+				</div>
+
 				<Link className="my-1 text-lg font-medium" href={post.url}>
 					{post.title}
 				</Link>

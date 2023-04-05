@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import React, { FormEvent, useState } from 'react';
 import useSWR from 'swr';
 import classNames from 'classnames';
-import { FaArrowUp, FaArrowDown } from 'react-icons/fa';
+import { FaArrowUp, FaArrowDown, FaCommentAlt } from 'react-icons/fa';
 
 const PostPage: NextPage = () => {
 	const router = useRouter();
@@ -122,7 +122,7 @@ const PostPage: NextPage = () => {
 									<p className="my-3 text-sm">{post.body}</p>
 									<div className="flex">
 										<button>
-											<i className="mr-1 fas fa-comment-alt fa-xs"></i>
+											<FaCommentAlt className="text-xs mr-1 inline"></FaCommentAlt>
 											<span className="font-bold">
 												{post.commentCount} Comments
 											</span>
@@ -130,7 +130,7 @@ const PostPage: NextPage = () => {
 									</div>
 								</div>
 							</div>
-							<div className="pr-6 mb-4">
+							<div className="pr-6 mb-4 pl-9">
 								{authenticated ? (
 									<div>
 										<p className="mb-1 text-xs">
