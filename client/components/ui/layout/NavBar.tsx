@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useAuthStateDispatch } from 'context/auth';
 import Link from 'next/link';
 import React, { FC } from 'react';
+import { FaSearch } from 'react-icons/fa';
 
 const NavBar: FC = () => {
 	const { state, dispatch } = useAuthStateDispatch();
@@ -25,10 +26,11 @@ const NavBar: FC = () => {
 			</span>
 			<div className="max-w-full px-4">
 				<div className="relative flex items-center bg-gray-100 border rounded hover:border-gray-700 hover:bg-white">
+					<FaSearch className="ml-2 text-gray-400" />
 					<input
 						type="text"
 						placeholder="Search..."
-						className="px-3 py-1 bg-transparent rounded focus:outline-none"
+						className="px-3 py-1 h-7 bg-transparent rounded focus:outline-none"
 					/>
 				</div>
 			</div>
@@ -37,7 +39,7 @@ const NavBar: FC = () => {
 				{!loading &&
 					(authenticated ? (
 						<button
-							className="w-20 p-2 mr-2 text-center text-white bg-gray-400 rounded"
+							className="w-20 px-2 mr-2 text-sm h-7 text-center text-white bg-gray-400 rounded"
 							onClick={handleLogout}
 						>
 							로그아웃
@@ -46,13 +48,13 @@ const NavBar: FC = () => {
 						<>
 							<Link
 								href={'/login'}
-								className="w-20 p-2 mr-2 text-center text-blue-500 border border-blue-500 rounded"
+								className="w-20 px-2 pt-1 mr-2 text-sm h-7 text-center text-blue-500 border border-blue-500 rounded"
 							>
 								로그인
 							</Link>
 							<Link
 								href={'/register'}
-								className="w-20 p-2 text-center text-white bg-gray-400 rounded"
+								className="w-20 px-2 pt-1 text-sm h-7 text-center text-white bg-gray-400 rounded"
 							>
 								회원가입
 							</Link>
