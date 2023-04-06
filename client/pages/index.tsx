@@ -14,7 +14,7 @@ const HomePage: NextPage = () => {
 	const { state } = useAuthStateDispatch();
 	const { authenticated } = state;
 
-	const address = 'http://localhost:4000/api/subs/sub/topSubs';
+	const address = '/api/subs/sub/topSubs';
 
 	const getKey = (pageIndex: number, previousPageData: Post[]) => {
 		if (previousPageData && !previousPageData.length) return null;
