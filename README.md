@@ -26,4 +26,5 @@ $ npm i --save-dev @types/cookie-parser
 $ npm install multer                                                            // 이미지 업로드
 $ npm i --save-dev @types/multer
 $ npm install transliteration --save                                            //url 슬러그 사용
+$ npm install env-cmd                                                           //환경에 따른 env파일 생성
 ```
